@@ -1,8 +1,8 @@
-// Dummy login credentials
+
 const validUsername = "eshaan";
 const validPassword = "1234";
 
-// Login validation
+
 function validateLogin(event) {
     event.preventDefault();
     const username = document.getElementById("username").value;
@@ -17,17 +17,17 @@ function validateLogin(event) {
     return false;
 }
 
-// Load from localStorage on page load
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("uploadForm");
 
-    // Load and display saved images
+    
     const savedImages = JSON.parse(localStorage.getItem("galleryImages")) || [];
     savedImages.forEach((imgData, index) => {
         createPhotoCard(imgData, index);
     });
 
-    // Image uploader logic
+    
     if (form) {
         form.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     desc
                 };
 
-                // Save to localStorage
+              
                 const images = JSON.parse(localStorage.getItem("galleryImages")) || [];
                 images.push(imageData);
                 localStorage.setItem("galleryImages", JSON.stringify(images));
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Create photo card with delete functionality
+
 function createPhotoCard({ imgURL, title, desc }, index) {
     const newCard = document.createElement("div");
     newCard.classList.add("photo-card");
@@ -74,12 +74,12 @@ function createPhotoCard({ imgURL, title, desc }, index) {
         <button class="delete-btn">Delete</button>
     `;
 
-    // Fullscreen image modal
+    
     newCard.querySelector("img").addEventListener("click", () => {
         openImageModal(imgURL);
     });
 
-    // Delete from DOM and localStorage
+    
     newCard.querySelector(".delete-btn").addEventListener("click", () => {
         newCard.remove();
         deleteFromStorage(index);
@@ -88,18 +88,18 @@ function createPhotoCard({ imgURL, title, desc }, index) {
     document.querySelector(".gallery").appendChild(newCard);
 }
 
-// Delete image from localStorage
+
 function deleteFromStorage(index) {
     const images = JSON.parse(localStorage.getItem("galleryImages")) || [];
     images.splice(index, 1);
     localStorage.setItem("galleryImages", JSON.stringify(images));
 
-    // Re-render to update index bindings
+
     document.querySelector(".gallery").innerHTML = "";
     images.forEach((imgData, idx) => createPhotoCard(imgData, idx));
 }
 
-// Open fullscreen image modal
+
 function openImageModal(src) {
     const modal = document.createElement("div");
     modal.classList.add("image-modal");
