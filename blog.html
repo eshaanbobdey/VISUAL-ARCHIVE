@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog - Visual Archive</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .blog-container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .blog-form input,
+    .blog-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #0F3460;
+      border: none;
+      border-radius: 5px;
+      color: #EAEAEA;
+    }
+
+    .blog-form button,
+    .back-btn {
+      padding: 10px 20px;
+      background: #F7C873;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .back-btn {
+      background: #6DDCCF;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .blog-post {
+      background: #16213E;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    .blog-post h3 {
+      color: #F7C873;
+    }
+
+    .blog-post p {
+      margin-top: 10px;
+    }
+
+    .post-actions {
+      margin-top: 10px;
+    }
+
+    .post-actions button {
+      margin-right: 10px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: #6DDCCF;
+    }
+
+    .delete-btn {
+      background-color: #FF6B6B;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container blog-container">
+    <a href="index.html" class="back-btn">← Back to Gallery</a>
+    <h1 class="site-title">Blog - Visual Archive</h1>
+
+    <form id="blogForm" class="blog-form">
+      <input type="text" id="blogTitle" placeholder="Blog Title" required />
+      <textarea id="blogContent" rows="5" placeholder="Write your blog..." required></textarea>
+      <button type="submit">Post</button>
+    </form>
+
+    <div id="postsContainer"></div>
+  </div>
+
+  <script>
+    const blogForm = document.getElementById("blogForm");
+    const blogTitle = document.getElementById("blogTitle");
+    const blogContent = document.getElementById("blogContent");
+    const postsContainer = document.getElementById("postsContainer");
+
+    let editingIndex = null;
+
+    function loadPosts() {
+      postsContainer.innerHTML = "";
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+
+      posts.forEach((post, index) => {
+        const postDiv = document.createElement("div");
+        postDiv.classList.add("blog-post");
+
+        postDiv.innerHTML = `
+          <h3>${post.title}</h3>
+          <p>${post.content}</p>
+          <div class="post-actions">
+            <button class="edit-btn" onclick="editPost(${index})">Edit</button>
+            <button class="delete-btn" onclick="deletePost(${index})">Delete</button>
+          </div>
+        `;
+
+        postsContainer.appendChild(postDiv);
+      });
+    }
+
+    function savePost(title, content) {
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+
+      if (editingIndex !== null) {
+        posts[editingIndex] = { title, content };
+        editingIndex = null;
+      } else {
+        posts.push({ title, content });
+      }
+
+      localStorage.setItem("blogPosts", JSON.stringify(posts));
+      loadPosts();
+      blogForm.reset();
+    }
+
+    function deletePost(index) {
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+      posts.splice(index, 1);
+      localStorage.setItem("blogPosts", JSON.stringify(posts));
+      loadPosts();
+    }
+
+    function editPost(index) {
+      const posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+      blogTitle.value = posts[index].title;
+      blogContent.value = posts[index].content;
+      editingIndex = index;
+      blogTitle.scrollIntoView({ behavior: "smooth" });
+    }
+
+    blogForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      savePost(blogTitle.value, blogContent.value);
+    });
+
+    loadPosts();
+  </script>
+</body>
+</html>
