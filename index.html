@@ -9,6 +9,9 @@
 </head>
 <body>
 
+    <!-- Logout Button (Top-left corner) -->
+    <button onclick="logout()" class="logout-btn">Logout</button>
+
     <div class="container">
         <h1 class="site-title">Visual Archive</h1>
         <p class="credits">By Eshaan Bobdey & Nirmay Nimkar, students at Manipal University Jaipur</p>
@@ -37,6 +40,11 @@
         </form>
     </div>
 
+    <!-- Blog Button (Bottom) -->
+    <div class="container">
+        <a href="blog.html" class="blog-btn">Go to Blog</a>
+    </div>
+
     <footer class="container footer">
         <h2>Contact & Resources</h2>
         <p>Email: <a href="mailto:xyzeshaan@gmail.com">xyzeshaan@gmail.com</a> | <a href="mailto:nirmaynimkar@gmail.com">nirmaynimkar@gmail.com</a></p>
@@ -51,6 +59,15 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- JavaScript to handle logout -->
+    <script>
+        function logout() {
+            // Clear any session or localStorage here if needed
+            localStorage.clear(); // Example: Clear all local storage
+            window.location.href = "login.html"; // Redirect to login page
+        }
+    </script>
+
 </body>
 </html>
-
